@@ -56,11 +56,33 @@ Model::Model()
 
 float Model::measure_oplist_runtime(const std::vector<OpBase*>& opBaseList)
 {
-  const int num_runs = 500;
   // warmup
   for (int times = 0; times < 100; times++)
     for (int i = 0; i < opBaseList.size(); i++)
       opBaseList[i]->forward();
+
+  // Estimate time per pass
+  float time_taken;
+  checkCUDA(cudaDeviceSynchronize());
+  checkCUDA(cudaEventRecord(startEvent));
+  for (int times = 0; times < 10; times++)
+    for (int i = 0; i < opBaseList.size(); i++)
+      opBaseList[i]->forward();
+  checkCUDA(cudaEventRecord(endEvent));
+  checkCUDA(cudaEventSynchronize(endEvent));
+  cudaEventElapsedTime(&time_taken, startEvent, endEvent);
+  float time_per_pass = time_taken / 10.0;
+
+  int num_minutes = 2;
+  int num_passes = num_minutes * 60 * 1000 / time_per_pass;
+
+  // Run GPU to stable temperature
+  for (int times = 0; times < num_passes; times++)
+    for (int i = 0; i < opBaseList.size(); i++)
+      opBaseList[i]->forward();
+
+  const int num_runs = 500;
+  
   // measure runtime
   float total_time = 0;
   for (int times = 0; times < num_runs; times++) {
