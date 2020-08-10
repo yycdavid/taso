@@ -1,2 +1,3 @@
 set(USE_CUDA ON)
 set(USE_CUDNN ON)
+set(CMAKE_BUILD_TYPE Debug)

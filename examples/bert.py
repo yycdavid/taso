@@ -1,4 +1,5 @@
 import taso as ts
+import onnx
 
 seq_length = 64
 hidden_dims = 1024
@@ -41,4 +42,17 @@ t = input
 for i in range(8):
     t = attention(graph, t, 16)
 
+#old_onnx = ts.export_onnx(graph)
+old_time = graph.run_time()
+
 new_graph = ts.optimize(graph, alpha=1.0, budget=100)
+
+#onnx.save(old_onnx, "old_bert.onnx")
+
+new_time = new_graph.run_time()
+print("Run time of original graph is: {}".format(old_time))
+print("Run time of optimized graph is: {}".format(new_time))
+
+#onnx_model = ts.export_onnx(new_graph)
+#onnx.save(onnx_model, "bert_new.onnx")
+

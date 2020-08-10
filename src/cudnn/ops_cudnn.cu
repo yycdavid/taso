@@ -56,23 +56,25 @@ Model::Model()
 
 float Model::measure_oplist_runtime(const std::vector<OpBase*>& opBaseList)
 {
-  const int num_runs = 100;
+  const int num_runs = 500;
   // warmup
-  for (int times = 0; times < num_runs; times++)
+  for (int times = 0; times < 100; times++)
     for (int i = 0; i < opBaseList.size(); i++)
       opBaseList[i]->forward();
   // measure runtime
-  // checkCUDA(cudaDeviceSynchronize());
-  checkCUDA(cudaEventRecord(startEvent));
+  float total_time = 0;
   for (int times = 0; times < num_runs; times++) {
+    float milliseconds;
+    checkCUDA(cudaDeviceSynchronize());
+    checkCUDA(cudaEventRecord(startEvent));
     for (int i = 0; i < opBaseList.size(); i++)
       opBaseList[i]->forward();
+    checkCUDA(cudaEventRecord(endEvent));
+    checkCUDA(cudaEventSynchronize(endEvent));
+    cudaEventElapsedTime(&milliseconds, startEvent, endEvent);
+    total_time += milliseconds;
   }
-  checkCUDA(cudaEventRecord(endEvent));
-  checkCUDA(cudaEventSynchronize(endEvent));
-  float milliseconds;
-  cudaEventElapsedTime(&milliseconds, startEvent, endEvent);
-  return milliseconds / num_runs;
+  return total_time / num_runs;
 }
 
 void* Model::allocate_memory(size_t size, const DATATYPE* data_initial)

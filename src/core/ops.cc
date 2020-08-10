@@ -377,7 +377,7 @@ TensorHandle Graph::new_weight(const Tensor& weight)
 Graph* Graph::optimize(float alpha, int budget, bool print_subst)
 {
   std::vector<GraphXfer*> xfers;
-  for (int i = 1; i < 3; i++)
+  /*for (int i = 1; i < 3; i++)
     for (int j = 0; j < 2; j++) {
       PaddingMode pad_mode = (j == 0) ? PD_MODE_SAME : PD_MODE_VALID;
       xfers.push_back(GraphXfer::create_conv_relu(model, i, i, pad_mode));
@@ -385,6 +385,7 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
       xfers.push_back(GraphXfer::create_conv_mul(model, i, i, pad_mode));
       xfers.push_back(GraphXfer::create_conv_add(model, i, i, pad_mode));
     }
+  */
   xfers.push_back(GraphXfer::create_enlarge_merge_convs(model, AC_MODE_NONE));
   xfers.push_back(GraphXfer::create_enlarge_merge_convs(model, AC_MODE_RELU));
   xfers.push_back(GraphXfer::create_merge_group_convs(model, 1, 1, AC_MODE_NONE));
@@ -401,6 +402,7 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
            "Please set TASO_HOME to the home directory of TASO source code.\n");
     assert(false);
   }
+  printf("############SEE ME ##############");
   std::string graph_subst_file = std::string(taso_path) + "/graph_subst.pb";
   GraphXfer::load_graph_xfer_from_pb_file(model, xfers, graph_subst_file);
   //xfers.push_back(create_fuse_conv_batch_xfer(model));
