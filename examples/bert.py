@@ -6,6 +6,7 @@ def get_args():
     parser = argparse.ArgumentParser(description='Main experiment script')
     parser.add_argument('--result_file', type=str, default='bert_time.txt', metavar='S',
         help='File to store times')
+    return parser.parse_args()
 
 seq_length = 64
 hidden_dims = 1024
