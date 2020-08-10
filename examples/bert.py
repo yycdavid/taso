@@ -1,5 +1,11 @@
 import taso as ts
 import onnx
+import argparse
+
+def get_args():
+    parser = argparse.ArgumentParser(description='Main experiment script')
+    parser.add_argument('--result_file', type=str, default='bert_time.txt', metavar='S',
+        help='File to store times')
 
 seq_length = 64
 hidden_dims = 1024
@@ -52,6 +58,10 @@ new_graph = ts.optimize(graph, alpha=1.0, budget=100)
 new_time = new_graph.run_time()
 print("Run time of original graph is: {}".format(old_time))
 print("Run time of optimized graph is: {}".format(new_time))
+
+args = get_args()
+with open(args.result_file, "a") as f:
+    f.write("{}\t{}\n".format(old_time, new_time))
 
 #onnx_model = ts.export_onnx(new_graph)
 #onnx.save(onnx_model, "bert_new.onnx")
