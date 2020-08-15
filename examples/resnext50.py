@@ -1,6 +1,12 @@
 import taso as ts
 import onnx
 
+def get_args():
+    parser = argparse.ArgumentParser(description='Main experiment script')
+    parser.add_argument('--result_file', type=str, default='resnext_time.txt', metavar='S',
+        help='File to store times')
+    return parser.parse_args()
+
 def resnext_block(graph, input, strides, out_channels, groups):
     w1 = graph.new_weight(dims=(out_channels,input.dim(1),1,1))
     t = graph.conv2d(input=input, weight=w1,
@@ -42,9 +48,6 @@ for i in range(3):
     strides = (1,1)
 
 old_time = graph.run_time()
-onnx_model = ts.export_onnx(graph)
-onnx.checker.check_model(onnx_model)
-onnx.save(onnx_model, "resnext50_old.onnx")
 
 new_graph = ts.optimize(graph, alpha=1.0, budget=100)
 
@@ -52,6 +55,6 @@ new_time = new_graph.run_time()
 print("Run time of original graph is: {}".format(old_time))
 print("Run time of optimized graph is: {}".format(new_time))
 
-onnx_model = ts.export_onnx(new_graph)
-onnx.checker.check_model(onnx_model)
-onnx.save(onnx_model, "resnext50_new.onnx")
+args = get_args()
+with open(args.result_file, "a") as f:
+    f.write("{}\t{}\n".format(old_time, new_time))

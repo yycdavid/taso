@@ -4,6 +4,12 @@ import onnx
 hidden_size = 512
 length = 5
 
+def get_args():
+    parser = argparse.ArgumentParser(description='Main experiment script')
+    parser.add_argument('--result_file', type=str, default='nasrnn_time.txt', metavar='S',
+        help='File to store times')
+    return parser.parse_args()
+
 def combine(graph, x, h):
     w1 = graph.new_input(dims=(hidden_size, x.dim(1)))
     w2 = graph.new_input(dims=(hidden_size, h.dim(1)))
@@ -31,17 +37,14 @@ state = graph.new_input(dims=(1, hidden_size))
 for i in range(length):
     state = nas_node(graph, state, xs[i])
 
+old_time = graph.run_time()
+
 new_graph = taso.optimize(graph, alpha=1.0, budget=100)
 
-graph = graph.preprocess_weights()
-old_time = graph.run_time()
-old_onnx = taso.export_onnx(graph)
-onnx.save(old_onnx, "old_nasrnn_pre.onnx")
-
-print("Run time of original graph is: {}".format(old_time))
-
 new_time = new_graph.run_time()
+print("Run time of original graph is: {}".format(old_time))
 print("Run time of optimized graph is: {}".format(new_time))
-onnx_model = taso.export_onnx(new_graph)
 
-onnx.save(onnx_model, "new_nasrnn.onnx")
+args = get_args()
+with open(args.result_file, "a") as f:
+    f.write("{}\t{}\n".format(old_time, new_time))
