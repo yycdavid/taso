@@ -445,8 +445,8 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
     if (counter % 1 == 0) {
       printf("        [%d] cost = %.4lf bestCost = %.4lf candidates.size() = %zu\n", counter, subGraph->total_cost(), bestCost, candidates.size());
       auto elapsed = std::chrono::high_resolution_clock::now() - start;
-      long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
-      timer_fs << microseconds << ", " << bestCost << std::endl;
+      long long milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+      timer_fs << milliseconds << ", " << bestCost << std::endl;
     }
     counter ++;
     for (size_t i = 0; i < xfers.size(); i++) {
