@@ -425,6 +425,7 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
 
   int counter = 0;
   int maxNumOps = inEdges.size();
+  auto start = std::chrono::high_resolution_clock::now();
   //long long start_time = microsecond_timer();
   ofstream timer_fs;
   timer_fs.open("timer.txt");
@@ -443,7 +444,9 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
     }
     if (counter % 1 == 0) {
       printf("        [%d] cost = %.4lf bestCost = %.4lf candidates.size() = %zu\n", counter, subGraph->total_cost(), bestCost, candidates.size());
-      //timer_fs << microsecond_timer() - start_time << ", " << bestCost << std::endl;
+      auto elapsed = std::chrono::high_resolution_clock::now() - start;
+      long long microseconds = std::chrono::duration_cast<std::chrono::microseconds>(elapsed).count();
+      timer_fs << microseconds << ", " << bestCost << std::endl;
     }
     counter ++;
     for (size_t i = 0; i < xfers.size(); i++) {
