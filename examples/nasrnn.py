@@ -1,5 +1,6 @@
 import taso
 import onnx
+import argparse
 
 hidden_size = 512
 length = 5
