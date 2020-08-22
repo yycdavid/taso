@@ -6,3 +6,6 @@ python/build/
 python/dist/
 python/taso.egg-info/
 python/taso/_cython/core.cpp
+*timer.txt
+*time.txt
+*timer_bert.txt
