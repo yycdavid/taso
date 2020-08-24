@@ -42,8 +42,8 @@ def normal_cell(graph, prev, cur, out_channels):
     ts.append(graph.avgpool2d(input=cur, kernels=(3,3), strides=(1,1), padding="SAME"))
     ts.append(prev)
     ts.append(graph.avgpool2d(input=prev, kernels=(3,3), strides=(1,1), padding="SAME"))
-    #ts.append(graph.avgpool2d(input=prev, kernels=(3,3), strides=(1,1), padding="SAME"))
-    ts.append(ts[-1])
+    ts.append(graph.avgpool2d(input=prev, kernels=(3,3), strides=(1,1), padding="SAME"))
+    #ts.append(ts[-1])
     ts.append(seperable_conv(graph, input=prev, out_channels=out_channels,
               kernels=(3,3), strides=(1,1), padding="SAME"))
     ts.append(seperable_conv(graph, input=prev, out_channels=out_channels,
@@ -72,8 +72,8 @@ def reduction_cell(graph, prev, cur, out_channels):
     ts.append(seperable_conv(graph, input=prev, out_channels=out_channels,
               kernels=(5,5), strides=(2,2), padding="SAME"))
     outputs.append(graph.add(ts[4], ts[5]))
-    #ts.append(graph.maxpool2d(input=cur, kernels=(3,3), strides=(2,2), padding="SAME"))
-    ts.append(ts[2])
+    ts.append(graph.maxpool2d(input=cur, kernels=(3,3), strides=(2,2), padding="SAME"))
+    #ts.append(ts[2])
     ts.append(seperable_conv(graph, input=outputs[0], out_channels=out_channels,
               kernels=(3,3), strides=(1,1), padding="SAME"))
     outputs.append(graph.add(ts[6], ts[7]))
