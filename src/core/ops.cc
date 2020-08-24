@@ -448,7 +448,7 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
     }
     if (counter % 1 == 0) {
       printf("        [%d] cost = %.4lf bestCost = %.4lf candidates.size() = %zu\n", counter, subGraph->total_cost(), bestCost, candidates.size());
-      if candidates.size() > largest_candidate_size {
+      if (candidates.size() > largest_candidate_size) {
         largest_candidate_size = candidates.size();
       }
     }
