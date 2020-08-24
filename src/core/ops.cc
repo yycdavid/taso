@@ -429,6 +429,8 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
   //long long start_time = microsecond_timer();
   ofstream timer_fs;
   timer_fs.open("timer.txt");
+  long long time_at_best = 0;
+  int largest_candidate_size = 1;
   printf("\n        ===== Start Cost-Based Backtracking Search =====\n");
   while (!candidates.empty()) {
     Graph *subGraph = candidates.top();
@@ -437,6 +439,8 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
       delete bestGraph;
       bestCost = subGraph->total_cost();
       bestGraph = subGraph;
+      auto elapsed = std::chrono::high_resolution_clock::now() - start;
+      time_at_best = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
     }
     if (counter > budget) {
       // TODO: free all remaining candidates when budget exhausted 
@@ -444,9 +448,9 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
     }
     if (counter % 1 == 0) {
       printf("        [%d] cost = %.4lf bestCost = %.4lf candidates.size() = %zu\n", counter, subGraph->total_cost(), bestCost, candidates.size());
-      auto elapsed = std::chrono::high_resolution_clock::now() - start;
-      long long milliseconds = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
-      timer_fs << milliseconds << ", " << bestCost << std::endl;
+      if candidates.size() > largest_candidate_size {
+        largest_candidate_size = candidates.size();
+      }
     }
     counter ++;
     for (size_t i = 0; i < xfers.size(); i++) {
@@ -462,6 +466,11 @@ Graph* Graph::optimize(float alpha, int budget, bool print_subst)
       delete subGraph;
     }
   }
+  auto elapsed = std::chrono::high_resolution_clock::now() - start;
+  long long time_total = std::chrono::duration_cast<std::chrono::milliseconds>(elapsed).count();
+
+  timer_fs << "best: " << time_at_best / 1000.0 << ", total: " << time_total / 1000.0 << ", candidates: " << largest_candidate_size << std::endl;
+
   bestGraph = bestGraph->preprocess_weights();
   printf("        ===== Finish Cost-Based Backtracking Search =====\n\n");
   //printf("bestCost = %.4lf\n", bestGraph->total_cost());
