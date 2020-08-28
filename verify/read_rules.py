@@ -263,55 +263,50 @@ if __name__ == '__main__':
         cnt = 0
         unbounded_cnt = 0
         multi_cnt = 0
-        with open("multi_rules.txt", "w") as fout:
-            with open("blk_rules.txt", "w") as fout_b:
-                for i, rule in enumerate(rules.rule):
-                    if i in blacklist:
+        with open("single_rules.txt", "w") as fsingle:
+            with open("multi_rules.txt", "w") as fout:
+                with open("blk_rules.txt", "w") as fout_b:
+                    for i, rule in enumerate(rules.rule):
+                        if i in blacklist:
+                            for output in rule.mappedOutput:
+                                # print("Verifing output: {}".format(output))
+                                src_tensor = rules_pb2.Tensor(opId=output.srcOpId, tsId=output.srcTsId)
+                                dst_tensor = rules_pb2.Tensor(opId=output.dstOpId, tsId=output.dstTsId)
+                                src = to_z3(src_tensor, rule.srcOp)
+                                dst = to_z3(dst_tensor, rule.dstOp)
+
+                                rule_str = "{}".format(src == dst)
+                                rule_str = rule_str.replace(' ','').replace('\n', '').replace('\r', '').replace('\t', '')
+                                fout_b.write(rule_str+'\n')
+                            continue
+
+                        if len(rule.mappedOutput) > 1:
+                            multi_cnt += len(rule.mappedOutput)
+                            print(len(rule.mappedOutput))
+
+                            for output in rule.mappedOutput:
+                                src_tensor = rules_pb2.Tensor(opId=output.srcOpId, tsId=output.srcTsId)
+                                dst_tensor = rules_pb2.Tensor(opId=output.dstOpId, tsId=output.dstTsId)
+                                src = to_z3(src_tensor, rule.srcOp)
+                                dst = to_z3(dst_tensor, rule.dstOp)
+
+                                rule_str = "{}".format(src == dst)
+                                rule_str = rule_str.replace(' ','').replace('\n', '').replace('\r', '').replace('\t', '')
+                                fout.write(rule_str)
+                            continue
+                        
                         for output in rule.mappedOutput:
-                            # print("Verifing output: {}".format(output))
                             src_tensor = rules_pb2.Tensor(opId=output.srcOpId, tsId=output.srcTsId)
                             dst_tensor = rules_pb2.Tensor(opId=output.dstOpId, tsId=output.dstTsId)
                             src = to_z3(src_tensor, rule.srcOp)
                             dst = to_z3(dst_tensor, rule.dstOp)
+                            if not check_bounded(src, dst):
+                                unbounded_cnt += 1
 
                             rule_str = "{}".format(src == dst)
                             rule_str = rule_str.replace(' ','').replace('\n', '').replace('\r', '').replace('\t', '')
-                            fout_b.write(rule_str+'\n')
-                        continue
-                    # print("Verifying rule: {} with {} outputs\n".format(rule, len(rule.mappedOutput)))
-                    if len(rule.mappedOutput) > 1:
-                        multi_cnt += len(rule.mappedOutput)
-                        print(len(rule.mappedOutput))
-
-                        for output in rule.mappedOutput:
-                            # print("Verifing output: {}".format(output))
-                            src_tensor = rules_pb2.Tensor(opId=output.srcOpId, tsId=output.srcTsId)
-                            dst_tensor = rules_pb2.Tensor(opId=output.dstOpId, tsId=output.dstTsId)
-                            src = to_z3(src_tensor, rule.srcOp)
-                            dst = to_z3(dst_tensor, rule.dstOp)
-
-                            rule_str = "{}".format(src == dst)
-                            rule_str = rule_str.replace(' ','').replace('\n', '').replace('\r', '').replace('\t', '')
-                            fout.write(rule_str)
-                            #fout.write('\n')
-                        continue
-
-                    '''
-                    for output in rule.mappedOutput:
-                        # print("Verifing output: {}".format(output))
-                        src_tensor = rules_pb2.Tensor(opId=output.srcOpId, tsId=output.srcTsId)
-                        dst_tensor = rules_pb2.Tensor(opId=output.dstOpId, tsId=output.dstTsId)
-                        src = to_z3(src_tensor, rule.srcOp)
-                        dst = to_z3(dst_tensor, rule.dstOp)
-                        if not check_bounded(src, dst):
-                            unbounded_cnt += 1
-
-                        rule_str = "{}".format(src == dst)
-                        #import pdb; pdb.set_trace()
-                        rule_str = rule_str.replace(' ','').replace('\n', '').replace('\r', '').replace('\t', '')
-                        fout.write(rule_str)
-                        cnt += 1
-                    '''
+                            fsingle.write(rule_str)
+                            cnt += 1
 
         print("Number of rules single: {}\n".format(cnt))
         print("Number of rules with multi: {}\n".format(multi_cnt + cnt))

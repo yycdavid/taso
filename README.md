@@ -1,3 +1,9 @@
+## Edits for tamago
+
+- Collect graph runtime speedup, time taken by optimizer, number of graphs explored (in candidate set). `examples/get_time.sh` shows how to run the benchmarks and get these results
+- To run GPU for ~2min each time before evaluating full graph runtime. This is to make sure GPU reaches a stable temperature, such that the measured results won't have a large variance due to temperature.
+- Convert synthesized rules into format that can be taken by [tamago](https://github.com/yycdavid/tamago). Run `python verify/read_rules.py graph_subst.pb` to convert the rules. 
+
 # TASO: A Tensor Algebra SuperOptimizer for Deep Learning
 
 TASO optimizes the computation graphs of DNN models using automatically generated and verified graph transformations.
