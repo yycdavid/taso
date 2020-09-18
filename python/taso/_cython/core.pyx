@@ -161,6 +161,10 @@ cdef class PyGraph:
         else:
             ptr = ctypes.cast(graph, ctypes.c_void_p).value
             self.p_graph = <Graph*>(ptr)
+
+    def export_to_file(self, file_name):
+        self.p_graph.export_to_file(file_name)
+
     def print_measurements(self):
         self.p_graph.print_measurements()
 
