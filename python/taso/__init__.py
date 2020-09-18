@@ -868,5 +868,8 @@ def export_onnx(graph):
 def optimize(graph, alpha = 1.0, budget = 1000, print_subst = False):
     return graph.optimize(alpha, budget, print_subst)
 
+def export_to_file(graph, file_name):
+    return graph.export_to_file(file_name)
+
 # Current TASO Version
 __version__ = "0.1.0"

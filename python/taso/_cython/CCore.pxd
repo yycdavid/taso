@@ -18,6 +18,7 @@
 from libcpp.memory cimport shared_ptr
 from libcpp.vector cimport vector
 from libcpp cimport bool
+from libcpp.string cimport string
 
 cdef extern from "taso/ops.h" namespace "taso":
     # This must be consistent with include/taso/ops.h
@@ -264,3 +265,4 @@ cdef extern from "taso/ops.h" namespace "taso":
         int get_output_dims(size_t guid, int* dims, int idx)
         void print_measurements()
         float run()
+        void export_to_file(string file_name)
