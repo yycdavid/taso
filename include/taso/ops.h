@@ -480,6 +480,7 @@ public:
   bool has_edge(Op srcOp, Op dstOp, int srcIdx, int dstIdx);
   void replace_node(Op oldOp, Op newOp);
   void remove_node(Op oldOp);
+  void export_to_file_raw(char * file_name);
   void export_to_file(std::string file_name);
   // This conv2ds will create a weight tensor
   TensorHandle group_conv2d(int groups,

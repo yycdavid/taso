@@ -776,6 +776,12 @@ void Graph::remove_node(Op oldOp)
   outEdges.erase(oldOp);
 }
 
+void Graph::export_to_file_raw(char * file_name)
+{
+  std::string s(file_name);
+  Graph::export_to_file(s);
+}
+
 // We do this in topological order because it will be easier to parse on
 // the other end
 void Graph::export_to_file(std::string file_name)
