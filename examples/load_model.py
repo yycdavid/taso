@@ -2,6 +2,10 @@ import taso as ts
 import onnx
 import sys
 
+# convert serialized taso graph to onnx graph
+# to run: python load_model.py < bts.model
+# you can serialize a taso graph with taso.export_to_file()
+
 graph = ts.new_graph()
 guid_node = dict()
 
