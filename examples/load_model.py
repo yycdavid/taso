@@ -3,8 +3,8 @@ import onnx
 import sys
 
 # convert serialized taso graph to onnx graph
-# to run: python load_model.py < bts.model
-# you can serialize a taso graph with taso.export_to_file()
+# to run: python load_model.py < your.model
+# output is stored in `out.onnx`
 
 ac_mode = {
   ts.get_activation_mode("NONE"): "NONE",
