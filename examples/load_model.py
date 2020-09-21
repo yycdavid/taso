@@ -29,11 +29,9 @@ while True:
   node = {
     'Input':     lambda: graph.new_input(dims=tuple(params)),
     'Weight':    lambda: graph.new_weight(dims=tuple(params)),
-    # activation for matmul
-    'Matmul':    lambda: graph.matmul( guid_node[deps[0]], guid_node[deps[1]], activation=ac_mode[params[0]]),
+    'Matmul':    lambda: graph.matmul(guid_node[deps[0]], guid_node[deps[1]], activation=ac_mode[params[0]]),
     'Reshape':   lambda: graph.reshape(guid_node[deps[0]], shape=tuple(params)),
-    # perm, shuffle
-    'Transpose': lambda: graph.transpose(guid_node[deps[0]], perm=(1,0,2), shuffle=True),
+    'Transpose': lambda: graph.transpose(guid_node[deps[0]], perm=tuple(params[:3]), shuffle=params[3]),
     'Relu':      lambda: graph.relu(guid_node[deps[0]]),
   }[ts.op_table[op]]
   guid_node[guid] = node()

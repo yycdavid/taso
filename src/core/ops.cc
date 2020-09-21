@@ -958,24 +958,48 @@ void Graph::export_op(ofstream &file_stream, Op &op)
     }
     case OP_TRANSPOSE:
     {
-      Transpose *transpose = (Transpose*) op.ptr;
-      Tensor t = op.ptr->outputs[0];
-      int permIdx = transpose->permIdx;
-      int ndim = t.numDim;
-      //int permArray[MAX_DIM];
-      for (int i = ndim - 1; i >= 0; i--) {
-        //permArray[i] = permIdx % ndim;
-        permIdx = permIdx / ndim;
-      }
-      assert(permIdx == 0);
-      for (int i = 0; i < ndim; i++) {
-        file_stream << t.dim[i];// 0 - N
-        if (i < ndim - 1)
-        {
+        Transpose* transpose = (Transpose*) op.ptr;
+        Tensor t = op.ptr->outputs[0];
+        assert(inList.size() == 1);
+        int ndim = t.numDim, permIdx = transpose->permIdx;
+        std::vector<int> permVec;
+        int permArray[MAX_DIM];
+        for (int i = ndim - 1; i >= 0; i--) {
+          permArray[i] = permIdx % ndim;
+          permIdx = permIdx / ndim;
+        }
+        assert(permIdx == 0);
+        for (int i = 0; i < ndim; i++)
+          for (int j = i + 1; j < ndim; j++)
+            assert(permArray[i] != permArray[j]);
+        for (int i = 0; i < ndim; i++)
+          permVec.push_back(permArray[i]);
+        for (int i = 0; i < ndim; i++) {
+          file_stream << permVec[i];
           file_stream << ',';
         }
-      }
-      break;
+        file_stream << transpose->shuffle;
+
+        break;
+
+      // Transpose *transpose = (Transpose*) op.ptr;
+      // Tensor t = op.ptr->outputs[0];
+      // int permIdx = transpose->permIdx;
+      // int ndim = t.numDim;
+      // //int permArray[MAX_DIM];
+      // for (int i = ndim - 1; i >= 0; i--) {
+      //   //permArray[i] = permIdx % ndim;
+      //   permIdx = permIdx / ndim;
+      // }
+      // assert(permIdx == 0);
+      // for (int i = 0; i < ndim; i++) {
+      //   file_stream << t.dim[i];// 0 - N
+      //   if (i < ndim - 1)
+      //   {
+      //     file_stream << ',';
+      //   }
+      // }
+      // break;
     }
     default:
       assert(false);
