@@ -119,6 +119,7 @@ op_table[OP_RESHAPE] = "Reshape"
 op_table[OP_TRANSPOSE] = "Transpose"
 op_table[OP_EW_ADD] = "Add"
 op_table[OP_EW_MUL] = "Mul"
+op_table[OP_ENLARGE] = "Enlarge"
 op_table[OP_MATMUL] = "Matmul"
 op_table[OP_SQUEEZE] = "Squeeze"
 op_table[OP_UNSQUEEZE] = "Unsqueeze"
@@ -291,6 +292,11 @@ cdef class PyGraph:
     # element-wise multiplication
     def mul(self, PyTensor x, PyTensor y):
         cdef TensorHandle handle = self.p_graph.element(OP_EW_MUL, x.ctensor, y.ctensor)
+        t = ctypes.cast(<unsigned long long>handle, ctypes.c_void_p)
+        return PyTensor(t)
+
+    def enlarge(self, PyTensor x, PyTensor y):
+        cdef TensorHandle handle = self.p_graph.enlarge(x.ctensor, y.ctensor)
         t = ctypes.cast(<unsigned long long>handle, ctypes.c_void_p)
         return PyTensor(t)
 

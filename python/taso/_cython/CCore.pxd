@@ -251,6 +251,8 @@ cdef extern from "taso/ops.h" namespace "taso":
                                bool shuffle)
         TensorHandle unsqueeze(const TensorHandle input,
                                const vector[int] axes)
+        TensorHandle enlarge(const TensorHandle w1,
+                             const TensorHandle w2)
         TensorHandle new_input(int ndim, const int* dims)
         TensorHandle new_weight(int ndim, const int* dims, const float* data)
         Graph* optimize(float alpha, int budget, bool print_subst)

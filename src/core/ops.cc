@@ -318,8 +318,12 @@ std::string Op::op_to_string(const OpBase* ptr)
       return "Slice";
     case OP_RESIZE:
       return "Resize";
-    default:
+    case OP_MERGE_GCONV:
+      return "MergeGConv";
+    default: {
+      cerr << std::to_string(OP_CONCAT);
       return "Unknown_" + std::to_string(ptr->type);
+    }
   }
 }
 
@@ -921,6 +925,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
       //file_stream << t.dim[3]; // 3
       break;
     }
+    case OP_ENLARGE:
     case OP_EW_ADD:
     case OP_EW_MUL:
     case OP_RELU:
@@ -939,6 +944,12 @@ void Graph::export_op(ofstream &file_stream, Op &op)
           file_stream << ',';
         }
       }
+      break;
+    }
+    case OP_MERGE_GCONV:
+    {
+      MergeGConv* merge = (MergeGConv*) op.ptr;
+      file_stream << merge->count;
       break;
     }
     case OP_MATMUL: // This doesn't seem to be implemented in run either
@@ -1007,8 +1018,10 @@ void Graph::export_op(ofstream &file_stream, Op &op)
       // }
       // break;
     }
-    default:
+    default: {
+      cerr << op.to_string();
       assert(false);
+    }
   }
   file_stream << std::endl;
 }
