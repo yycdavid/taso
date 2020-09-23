@@ -151,6 +151,7 @@ op_table[OP_LOGICAL_NOT] = "Not"
 op_table[OP_SQRT] = "Sqrt"
 op_table[OP_SLICE] = "Slice"
 op_table[OP_RESIZE] = "Resize"
+op_table[OP_MERGE_GCONV] = "MergeGConv"
 
 cdef class PyGraph:
     cdef Graph *p_graph #Hold a Graph instance
@@ -297,6 +298,11 @@ cdef class PyGraph:
 
     def enlarge(self, PyTensor x, PyTensor y):
         cdef TensorHandle handle = self.p_graph.enlarge(x.ctensor, y.ctensor)
+        t = ctypes.cast(<unsigned long long>handle, ctypes.c_void_p)
+        return PyTensor(t)
+
+    def merge_gconv(self, PyTensor w, count):
+        cdef TensorHandle handle = self.p_graph.merge_gconv(w.ctensor, count)
         t = ctypes.cast(<unsigned long long>handle, ctypes.c_void_p)
         return PyTensor(t)
 

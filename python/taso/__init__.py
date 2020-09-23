@@ -760,6 +760,7 @@ input_weight_names['Matmul'] = ['input', 'weight']
 input_weight_names['Mul'] = ['input1', 'input2']
 input_weight_names['Reshpe'] = ['input', 'shape']
 input_weight_names['Enlarge'] = ['weight1', 'weight2']
+input_weight_names['MergeGConv'] = ['input']
 
 operator_attrs = dict()
 operator_attrs['Add'] = []
@@ -792,6 +793,7 @@ operator_attrs['Tanh'] = []
 operator_attrs['Transpose'] = ['perm']
 operator_attrs['Unsqueeze'] = ['axes']
 operator_attrs['Enlarge'] = []
+operator_attrs['MergeGConv'] = []
 
 def _input_tensor_name(graph, inedge, op):
     intype = graph.get_operator_type(inedge['srcOp'])

@@ -43,6 +43,7 @@ while True:
     'Enlarge':   lambda: [graph.enlarge(guid_node[deps[0][0]][deps[0][1]], guid_node[deps[1][0]][deps[1][1]])],
     'Add':       lambda: [graph.add(guid_node[deps[0][0]][deps[0][1]], guid_node[deps[1][0]][deps[1][1]])],
     'Reshape':   lambda: [graph.reshape(guid_node[deps[0][0]][deps[0][1]], shape=tuple(params))],
+    'MergeGConv':lambda: [graph.merge_gconv(guid_node[deps[0][0]][deps[0][1]], count=params[0])],
     'Transpose': lambda: [graph.transpose(guid_node[deps[0][0]][deps[0][1]], perm=tuple(params[:3]), shuffle=params[3])],
     'Relu':      lambda: [graph.relu(guid_node[deps[0][0]][deps[0][1]])],
     'Split':     lambda: graph.split(guid_node[deps[0][0]][deps[0][1]], axis=params[0], sizes=params[1:]),

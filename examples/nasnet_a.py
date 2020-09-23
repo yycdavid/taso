@@ -100,14 +100,15 @@ for i in range(3):
     out_channels *= 2
     input = reduction_cell(graph, prev, cur, out_channels)
 
-old_time = graph.run_time()
-
-new_graph = ts.optimize(graph, alpha=1.0, budget=100)
-
-new_time = new_graph.run_time()
-print("Run time of original graph is: {}".format(old_time))
-print("Run time of optimized graph is: {}".format(new_time))
-
-args = get_args()
-with open(args.result_file, "a") as f:
-    f.write("{}\t{}\n".format(old_time, new_time))
+ts.export_to_file(graph, b"/usr/TASO/examples/nasnet_a.model")
+# old_time = graph.run_time()
+# 
+# new_graph = ts.optimize(graph, alpha=1.0, budget=100)
+# 
+# new_time = new_graph.run_time()
+# print("Run time of original graph is: {}".format(old_time))
+# print("Run time of optimized graph is: {}".format(new_time))
+# 
+# args = get_args()
+# with open(args.result_file, "a") as f:
+#     f.write("{}\t{}\n".format(old_time, new_time))

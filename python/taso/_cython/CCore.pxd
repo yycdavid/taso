@@ -253,6 +253,7 @@ cdef extern from "taso/ops.h" namespace "taso":
                                const vector[int] axes)
         TensorHandle enlarge(const TensorHandle w1,
                              const TensorHandle w2)
+        TensorHandle merge_gconv(const TensorHandle weight, int count)
         TensorHandle new_input(int ndim, const int* dims)
         TensorHandle new_weight(int ndim, const int* dims, const float* data)
         Graph* optimize(float alpha, int budget, bool print_subst)
