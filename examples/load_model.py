@@ -47,8 +47,8 @@ while True:
     'MergeGConv':lambda: [graph.merge_gconv(guid_node[deps[0][0]][deps[0][1]], count=params[0])],
     'Transpose': lambda: [graph.transpose(guid_node[deps[0][0]][deps[0][1]], perm=tuple(params[:3]), shuffle=params[3])],
     'Relu':      lambda: [graph.relu(guid_node[deps[0][0]][deps[0][1]])],
-    'Tanh':      lambda: [graph.relu(guid_node[deps[0][0]][deps[0][1]])],
-    'Sigmoid':   lambda: [graph.relu(guid_node[deps[0][0]][deps[0][1]]), params[0]],
+    'Tanh':      lambda: [graph.tanh(guid_node[deps[0][0]][deps[0][1]])],
+    'Sigmoid':   lambda: [graph.sigmoid(guid_node[deps[0][0]][deps[0][1]]), params[0]],
     'Split':     lambda: graph.split(guid_node[deps[0][0]][deps[0][1]], axis=params[0], sizes=params[1:]),
     'Concat':    lambda: [graph.concat(axis = params[0], inputs = [guid_node[dep[0]][dep[1]] for dep in deps])],
     'Conv':      lambda: [graph.conv2d(
