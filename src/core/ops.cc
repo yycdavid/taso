@@ -925,11 +925,16 @@ void Graph::export_op(ofstream &file_stream, Op &op)
       //file_stream << t.dim[3]; // 3
       break;
     }
+    case OP_SIGMOID:
+    {
+      Activation* sigmoid = (Activation*) op.ptr;
+      file_stream << sigmoid->inPlace;
+      break;
+    }
     case OP_ENLARGE:
     case OP_EW_ADD:
     case OP_EW_MUL:
     case OP_RELU:
-    case OP_SIGMOID:
     case OP_TANH:
     case OP_BATCHNORM:
     case OP_INPUT:

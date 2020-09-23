@@ -38,14 +38,17 @@ state = graph.new_weight(dims=(1, hidden_size))
 for i in range(length):
     state = nas_node(graph, state, xs[i])
 
-old_time = graph.run_time()
+old_onnx = taso.export_onnx(graph)
+onnx.save(old_onnx, "nasrnn.onnx")
 
-new_graph = taso.optimize(graph, alpha=1.0, budget=100)
-
-new_time = new_graph.run_time()
-print("Run time of original graph is: {}".format(old_time))
-print("Run time of optimized graph is: {}".format(new_time))
-
-args = get_args()
-with open(args.result_file, "a") as f:
-    f.write("{}\t{}\n".format(old_time, new_time))
+# old_time = graph.run_time()
+# 
+# new_graph = taso.optimize(graph, alpha=1.0, budget=100)
+# 
+# new_time = new_graph.run_time()
+# print("Run time of original graph is: {}".format(old_time))
+# print("Run time of optimized graph is: {}".format(new_time))
+# 
+# args = get_args()
+# with open(args.result_file, "a") as f:
+#     f.write("{}\t{}\n".format(old_time, new_time))

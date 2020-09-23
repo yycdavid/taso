@@ -48,14 +48,17 @@ for i in range(3):
     t = resnext_block(graph, t, strides, 1024, 32)
     strides = (1,1)
 
-old_time = graph.run_time()
+old_onnx = ts.export_onnx(graph)
+onnx.save(old_onnx, "resnext50.onnx")
 
-new_graph = ts.optimize(graph, alpha=1.0, budget=100)
-
-new_time = new_graph.run_time()
-print("Run time of original graph is: {}".format(old_time))
-print("Run time of optimized graph is: {}".format(new_time))
-
-args = get_args()
-with open(args.result_file, "a") as f:
-    f.write("{}\t{}\n".format(old_time, new_time))
+# old_time = graph.run_time()
+# 
+# new_graph = ts.optimize(graph, alpha=1.0, budget=100)
+# 
+# new_time = new_graph.run_time()
+# print("Run time of original graph is: {}".format(old_time))
+# print("Run time of optimized graph is: {}".format(new_time))
+# 
+# args = get_args()
+# with open(args.result_file, "a") as f:
+#     f.write("{}\t{}\n".format(old_time, new_time))
