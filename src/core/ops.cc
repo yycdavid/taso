@@ -321,7 +321,6 @@ std::string Op::op_to_string(const OpBase* ptr)
     case OP_MERGE_GCONV:
       return "MergeGConv";
     default: {
-      cerr << std::to_string(OP_CONCAT);
       return "Unknown_" + std::to_string(ptr->type);
     }
   }
@@ -836,6 +835,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
 
   file_stream << op.ptr->type << std::endl;
 
+
   std::string deps_string;
   std::set<Edge, EdgeCompare> inList = inEdges[op];
   std::set<Edge, EdgeCompare>::const_iterator it;
@@ -1024,7 +1024,6 @@ void Graph::export_op(ofstream &file_stream, Op &op)
       // break;
     }
     default: {
-      cerr << op.to_string();
       assert(false);
     }
   }

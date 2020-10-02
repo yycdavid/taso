@@ -350,6 +350,16 @@ def _avgpool2d(op, graph, tensors, initializer):
     outputs = graph.avgpool2d(input=inputs[0], kernels=kernels, strides=strides, padding=pads)
     return outputs
 
+def _globalavgpool2d(op, graph, tensors, initializer):
+    inputs = _get_inputs(op, graph, tensors, initializer)
+    assert len(inputs) == 1, "GlobalAvgPool2D requires exactly one input"
+    dim = inputs[0].dim(inputs[0].nDim-1)
+    kernels = [dim, dim]
+    strides = [1, 1]
+    pads = "VALID"
+    outputs = graph.avgpool2d(input=inputs[0], kernels=kernels, strides=strides, padding=pads)
+    return outputs
+
 def _reducemax(op, graph, tensors, initializer):
     inputs = _get_inputs(op, graph, tensors, initializer)
     assert len(inputs) == 1, "ReduceMax requires exactly one input"
@@ -645,6 +655,7 @@ xf_operators['Min'] = _min
 xf_operators['Mul'] = _mul
 xf_operators['Not'] = _logical_not
 xf_operators['AveragePool'] = _avgpool2d
+xf_operators['GlobalAveragePool'] = _globalavgpool2d
 xf_operators['Shape'] = _shape
 xf_operators['Size'] = _size
 xf_operators['Split'] = _split
@@ -758,7 +769,7 @@ input_weight_names['Concat'] = ['input1', 'input2', 'input3', 'input4', 'input5'
 input_weight_names['Conv'] = ['input', 'weight', 'bias']
 input_weight_names['Matmul'] = ['input', 'weight']
 input_weight_names['Mul'] = ['input1', 'input2']
-input_weight_names['Reshpe'] = ['input', 'shape']
+input_weight_names['Reshape'] = ['input', 'shape']
 input_weight_names['Enlarge'] = ['weight1', 'weight2']
 input_weight_names['MergeGConv'] = ['input']
 
