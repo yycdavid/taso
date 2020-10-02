@@ -938,6 +938,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
     case OP_TANH:
     case OP_BATCHNORM:
     case OP_INPUT:
+    case OP_DROPOUT:
     case OP_WEIGHT:
     {
       Tensor t = op.ptr->inputs[0];
@@ -996,6 +997,8 @@ void Graph::export_op(ofstream &file_stream, Op &op)
             assert(permArray[i] != permArray[j]);
         for (int i = 0; i < ndim; i++)
           permVec.push_back(permArray[i]);
+        file_stream << ndim;
+        file_stream << ',';
         for (int i = 0; i < ndim; i++) {
           file_stream << permVec[i];
           file_stream << ',';
@@ -1024,6 +1027,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
       // break;
     }
     default: {
+      cerr << op.ptr->type;
       assert(false);
     }
   }

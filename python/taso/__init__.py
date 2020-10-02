@@ -239,12 +239,24 @@ def _exp(op, graph, tensors, initializer):
     outputs = graph.exp(input=inputs[0])
     return outputs
 
+def _flatten(op, graph, tensors, initializer):
+    inputs = _get_inputs(op, graph, tensors, initializer)
+    assert len(inputs) == 1, "Flatten requires exactly one input"
+    shape = []
+    shape.append(inputs[0].dim(0))
+    dim = 1
+    for i in range(1, inputs[0].nDim):
+        dim *= inputs[0].dim(i)
+    shape.append(dim)
+    outputs = graph.reshape(inputs[0], tuple(shape))
+    return outputs
+
 def _gemm(op, graph, tensors, initializer):
     inputs = _get_inputs(op, graph, tensors, initializer)
     attrs = _parse_attribute(op.attribute)
-    if "transA" in attrs:
+    if "transA" in attrs and attrs["transA"] == 1:
         inputs[0] = graph.transpose(inputs[0], (1,0), shuffle=True)
-    if "transB" in attrs:
+    if "transB" in attrs and attrs["transB"] == 1:
         inputs[1] = graph.transpose(inputs[1], (1,0), shuffle=True)
     outputs = graph.matmul(inputs[0], inputs[1])
     return outputs
@@ -633,6 +645,7 @@ xf_operators['Div'] = _div
 xf_operators['Dropout'] = _dropout
 xf_operators['Equal'] = _equal
 xf_operators['Exp'] = _exp
+xf_operators['Flatten'] = _flatten
 xf_operators['Gemm'] = _gemm
 xf_operators['Greater'] = _greater
 xf_operators['Identity'] = _identity
@@ -766,6 +779,7 @@ input_weight_names['Add'] = ['input1', 'input2']
 input_weight_names['AveragePool'] = ['input']
 input_weight_names['BatchNormalization'] = ['input', 'scale', 'bias', 'mean', 'var']
 input_weight_names['Concat'] = ['input1', 'input2', 'input3', 'input4', 'input5', 'input6']
+input_weight_names['Transpose'] = ['input']
 input_weight_names['Conv'] = ['input', 'weight', 'bias']
 input_weight_names['Matmul'] = ['input', 'weight']
 input_weight_names['Mul'] = ['input1', 'input2']
