@@ -773,8 +773,8 @@ public:
 
 class BatchNorm : public OpBase {
 public:
-  BatchNorm(Model* _model, Tensor _input, Tensor _scale,
-            Tensor _bias, Tensor _mean, Tensor _var);
+  BatchNorm(Model* _model, const Tensor& _input, const Tensor& _scale,
+            const Tensor& _bias, const Tensor& _mean, const Tensor& _var);
   ~BatchNorm(void);
   bool get_int_parameter(PMParameter para, int*);
   void forward(bool block);

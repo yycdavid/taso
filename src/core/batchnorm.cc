@@ -56,8 +56,8 @@ Op Model::get_or_create_batchnorm(Tensor _input,
   return ret;
 }
 
-BatchNorm::BatchNorm(Model* _model, Tensor _input, Tensor _scale,
-                     Tensor _bias, Tensor _mean, Tensor _var)
+BatchNorm::BatchNorm(Model* _model, const Tensor& _input, const Tensor& _scale,
+                     const Tensor& _bias, const Tensor& _mean, const Tensor& _var)
 : OpBase(_input, _scale, _bias, _mean, _var, _model, OP_BATCHNORM)
 {
   assert(_input.numDim == 4);

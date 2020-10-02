@@ -51,7 +51,7 @@ while True:
     'Sigmoid':   lambda: [graph.sigmoid(guid_node[deps[0][0]][deps[0][1]]), params[0]],
     'Split':     lambda: graph.split(guid_node[deps[0][0]][deps[0][1]], axis=params[0], sizes=params[1:]),
     'Concat':    lambda: [graph.concat(axis = params[0], inputs = [guid_node[dep[0]][dep[1]] for dep in deps])],
-    'BatchNormalization':    lambda: [graph.batchnorm(guid_node[deps[0][0]][deps[0][1]], guid_node[deps[1][0]][deps[1][1]], guid_node[deps[2][0]][deps[2][1]], guid_node[deps[3][0]][deps[3][1]], guid_node[deps[4][0]][deps[4][1]])],
+    'BatchNormalization':    lambda: [graph.batchnorm(guid_node[deps[4][0]][deps[4][1]], guid_node[deps[0][0]][deps[0][1]], guid_node[deps[1][0]][deps[1][1]], guid_node[deps[2][0]][deps[2][1]], guid_node[deps[3][0]][deps[3][1]])],
     'Conv':      lambda: [graph.conv2d(
                            input = guid_node[deps[0][0]][deps[0][1]],
                            weight = guid_node[deps[1][0]][deps[1][1]],
