@@ -176,10 +176,10 @@ struct Edge {
 
 struct EdgeCompare {
   bool operator()(const Edge& a, const Edge& b) const {
+    if (a.dstIdx != b.dstIdx) return a.dstIdx < b.dstIdx;
     if (!(a.srcOp == b.srcOp)) return a.srcOp < b.srcOp;
     if (!(a.dstOp == b.dstOp)) return a.dstOp < b.dstOp;
     if (a.srcIdx != b.srcIdx) return a.srcIdx < b.srcIdx;
-    if (a.dstIdx != b.dstIdx) return a.dstIdx < b.dstIdx;
     return false;
   };
 };
