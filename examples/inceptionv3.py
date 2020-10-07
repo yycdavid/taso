@@ -6,6 +6,10 @@ def get_args():
     parser = argparse.ArgumentParser(description='Main experiment script')
     parser.add_argument('--result_file', type=str, default='bert_time.txt', metavar='S',
         help='File to store times')
+    parser.add_argument('--alpha', type=float, default=1.0,
+        help='Threshold value')
+    parser.add_argument('--iter', type=int, default=100,
+        help='Number of iterations for backtracking search')
     return parser.parse_args()
 
 
@@ -247,7 +251,8 @@ old_time = graph.run_time()
 #old_onnx = ts.export_onnx(graph)
 #onnx.save(old_onnx, "inceptionv3-py.onnx")
 
-new_graph = ts.optimize(graph, alpha=1.0, budget=100)
+args = get_args()
+new_graph = ts.optimize(graph, alpha=args.alpha, budget=args.iter)
 
 new_time = new_graph.run_time()
 
@@ -257,6 +262,5 @@ new_time = new_graph.run_time()
 print("Run time of original graph is: {}".format(old_time))
 print("Run time of optimized graph is: {}".format(new_time))
 
-args = get_args()
 with open(args.result_file, "a") as f:
     f.write("{}\t{}\n".format(old_time, new_time))
