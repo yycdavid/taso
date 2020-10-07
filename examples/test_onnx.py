@@ -1,6 +1,7 @@
 import taso
 import onnx
 import argparse
+import time
 
 parser = argparse.ArgumentParser()
 parser.add_argument("-f", "--file", help="Path to input ONNX file", required=True)

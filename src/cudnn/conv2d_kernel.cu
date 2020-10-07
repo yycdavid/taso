@@ -164,6 +164,8 @@ void Model::measure_conv2d_cost(Conv2D* conv)
       inputTensor, filterDesc, &n, &c, &h, &w));
   assert(n == inputN);
   assert(c == outputC);
+  cerr << outputH << 'n';
+  cerr << h << 'n';
   assert(outputH == h);
   assert(outputW == w);
   checkCUDNN(cudnnSetTensor4dDescriptor(outputTensor, CUDNN_TENSOR_NCHW,

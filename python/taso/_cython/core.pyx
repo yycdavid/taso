@@ -87,7 +87,14 @@ cdef class PyTensor:
                 return None
             else:
                 return ctypes.cast(<unsigned long long>self.ctensor, ctypes.c_void_p)
-        
+
+    property nDim:
+        def __get__(self):
+            if self.ctensor == NULL:
+                return None
+            else:
+                return self.ctensor.numDim 
+
         def __set__(self, value):
             self._set_tensor(value)
 

@@ -321,7 +321,6 @@ std::string Op::op_to_string(const OpBase* ptr)
     case OP_MERGE_GCONV:
       return "MergeGConv";
     default: {
-      cerr << std::to_string(OP_CONCAT);
       return "Unknown_" + std::to_string(ptr->type);
     }
   }
@@ -836,6 +835,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
 
   file_stream << op.ptr->type << std::endl;
 
+
   std::string deps_string;
   std::set<Edge, EdgeCompare> inList = inEdges[op];
   std::set<Edge, EdgeCompare>::const_iterator it;
@@ -938,6 +938,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
     case OP_TANH:
     case OP_BATCHNORM:
     case OP_INPUT:
+    case OP_DROPOUT:
     case OP_WEIGHT:
     {
       Tensor t = op.ptr->inputs[0];
@@ -996,6 +997,8 @@ void Graph::export_op(ofstream &file_stream, Op &op)
             assert(permArray[i] != permArray[j]);
         for (int i = 0; i < ndim; i++)
           permVec.push_back(permArray[i]);
+        file_stream << ndim;
+        file_stream << ',';
         for (int i = 0; i < ndim; i++) {
           file_stream << permVec[i];
           file_stream << ',';
@@ -1024,7 +1027,7 @@ void Graph::export_op(ofstream &file_stream, Op &op)
       // break;
     }
     default: {
-      cerr << op.to_string();
+      cerr << op.ptr->type;
       assert(false);
     }
   }
