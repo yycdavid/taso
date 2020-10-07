@@ -9,3 +9,8 @@ python/taso/_cython/core.cpp
 *timer.txt
 *time.txt
 *timer_bert.txt
+._*
+.DS_Store
+*05.txt
+*1k.txt
+*stats.txt

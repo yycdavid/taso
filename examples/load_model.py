@@ -64,5 +64,8 @@ while True:
   }[ts.op_table[op]]
   guid_node[guid] = node()
 
+#old_time = graph.run_time()
+#print("Run time of original graph is: {}".format(old_time))
+
 onnx_model = ts.export_onnx(graph)
 onnx.save(onnx_model, "out.onnx")

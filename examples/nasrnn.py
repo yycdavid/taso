@@ -9,6 +9,10 @@ def get_args():
     parser = argparse.ArgumentParser(description='Main experiment script')
     parser.add_argument('--result_file', type=str, default='nasrnn_time.txt', metavar='S',
         help='File to store times')
+    parser.add_argument('--alpha', type=float, default=1.0,
+        help='Threshold value')
+    parser.add_argument('--iter', type=int, default=100,
+        help='Number of iterations for backtracking search')
     return parser.parse_args()
 
 def combine(graph, x, h):
@@ -38,17 +42,17 @@ state = graph.new_weight(dims=(1, hidden_size))
 for i in range(length):
     state = nas_node(graph, state, xs[i])
 
-old_onnx = taso.export_onnx(graph)
-onnx.save(old_onnx, "nasrnn.onnx")
+#old_onnx = taso.export_onnx(graph)
+#onnx.save(old_onnx, "nasrnn.onnx")
 
-# old_time = graph.run_time()
-# 
-# new_graph = taso.optimize(graph, alpha=1.0, budget=100)
-# 
-# new_time = new_graph.run_time()
-# print("Run time of original graph is: {}".format(old_time))
-# print("Run time of optimized graph is: {}".format(new_time))
-# 
-# args = get_args()
-# with open(args.result_file, "a") as f:
-#     f.write("{}\t{}\n".format(old_time, new_time))
+old_time = graph.run_time()
+
+args = get_args()
+new_graph = ts.optimize(graph, alpha=args.alpha, budget=args.iter)
+
+new_time = new_graph.run_time()
+print("Run time of original graph is: {}".format(old_time))
+print("Run time of optimized graph is: {}".format(new_time))
+
+with open(args.result_file, "a") as f:
+    f.write("{}\t{}\n".format(old_time, new_time))
