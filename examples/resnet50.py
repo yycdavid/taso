@@ -1,5 +1,6 @@
 import taso as ts
 import onnx
+import argparse
 
 def get_args():
     parser = argparse.ArgumentParser(description='Main experiment script')
