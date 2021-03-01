@@ -1,8 +1,14 @@
-python nasrnn.py
-mv timer.txt nasrnn_timer.txt
+num_passes=1
+postfix=10
 
-#python nasnet_a.py
-#mv timer.txt nasneta_timer.txt
+models=(
+    squeezenet
+)
 
-python resnext50.py
-mv timer.txt resnext50_timer.txt
+for model in "${models[@]}"; do
+    for pass in $(seq 0 $(expr $num_passes - 1))
+    do
+        python test_onnx.py --file "$model".onnx --result_file "$model"_time_"$postfix".txt --iter $postfix
+        cat timer.txt >> "$model"_stats_"$postfix".txt
+    done
+done

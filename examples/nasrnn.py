@@ -1,4 +1,4 @@
-import taso
+import taso as ts
 import onnx
 import argparse
 
@@ -34,7 +34,7 @@ def nas_node(graph, input, x):
     midt.append(graph.mul(graph.tanh(midt[4]), graph.tanh(midt[5])))
     return graph.tanh(midt[6])
 
-graph = taso.new_graph()
+graph = ts.new_graph()
 xs = list()
 for i in range(length):
     xs.append(graph.new_input(dims=(1, hidden_size)))
